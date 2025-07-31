@@ -1,0 +1,121 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+  <head>
+    <meta charset="UTF-8" />
+    <meta
+      name="viewport"
+      content="width=device-width, initial-scale=1.0" />
+    <title>
+      Riegos.dev - Tower Defense
+    </title>
+    <style>
+      /* Estilos para zerar margens e centralizar tudo */
+      body {
+        margin: 0;
+        padding: 0;
+        background-color: #1a1a1a;
+        color: white;
+        font-family: "Segoe UI", Tahoma,
+          Geneva, Verdana, sans-serif;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        min-height: 100vh;
+      }
+
+      /* Estilo do Header e Footer */
+      header,
+      footer {
+        width: 100%;
+        text-align: center;
+        padding: 10px 0;
+        background-color: #111;
+      }
+
+      header img,
+      footer img {
+        max-width: 90%;
+        height: auto;
+      }
+
+      /* A nova barra de status do jogo */
+      #game-stats {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        width: 1280px;
+        padding: 10px 20px;
+        box-sizing: border-box; /* Garante que o padding não aumente a largura */
+        background-color: #2a2a2a;
+        border-left: 2px solid #555;
+        border-right: 2px solid #555;
+      }
+
+      #game-stats span {
+        font-size: 22px;
+        font-weight: bold;
+      }
+
+      #money-display {
+        color: gold;
+      }
+      #score-display {
+        color: cyan;
+      }
+      #life-display {
+        color: lightgreen;
+      }
+      #victory-score-display {
+        color: violet;
+      }
+
+      /* Estilo do Canvas */
+      canvas {
+        background-color: #000;
+        border: 2px solid #555;
+        border-top: none; /* Remove a borda de cima para grudar na barra de status */
+      }
+    </style>
+  </head>
+  <body>
+    <header>
+      <img
+        src="./img/riegosdevtdfinal.png"
+        alt="Título do Jogo Riegos.dev Tower Defense" />
+    </header>
+
+    <div id="game-stats">
+      <span id="money-display"
+        >$$: 100</span
+      >
+      <div>
+        <span id="score-display"
+          >Score: 0</span
+        >
+        <span
+          id="victory-score-display"
+          style="margin-left: 20px"
+          >Meta: 1050</span
+        >
+      </div>
+      <span id="life-display"
+        >Life: 10</span
+      >
+    </div>
+
+    <canvas
+      id="game-canvas"
+      width="1280"
+      height="720"></canvas>
+
+    <footer>
+      <img
+        src="./img/devdtr.png"
+        alt="Desenvolvido por Daniel Riego" />
+    </footer>
+
+    <script
+      src="main.js"
+      type="module"></script>
+  </body>
+</html>
