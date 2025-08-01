@@ -77,15 +77,30 @@ class Game {
 
     #addEventListeners() {
         this.#canvas.addEventListener('click', (event) => {
+            // --- LÓGICA DE CONVERSÃO DE COORDENADAS ---
+            const rect = this.#canvas.getBoundingClientRect(); // Pega o tamanho e posição real do canvas na tela
+            const scaleX = this.#canvas.width / rect.width;    // Calcula a proporção horizontal
+            const scaleY = this.#canvas.height / rect.height;  // Calcula a proporção vertical
+
+            // Converte as coordenadas do mouse (tela) para coordenadas do jogo (canvas)
+            const gameX = (event.clientX - rect.left) * scaleX;
+            const gameY = (event.clientY - rect.top) * scaleY;
+
             if (this.#gameState === 'playing') {
-                this.#placeTower(event.offsetX, event.offsetY);
+                this.#placeTower(gameX, gameY); // Usa as coordenadas corrigidas
             } else if (this.#gameState === 'defeat') {
                 window.location.reload();
             }
         });
+
         this.#canvas.addEventListener('mousemove', (event) => {
-            this.#mouseX = event.offsetX;
-            this.#mouseY = event.offsetY;
+            // --- LÓGICA DE CONVERSÃO APLICADA AQUI TAMBÉM ---
+            const rect = this.#canvas.getBoundingClientRect();
+            const scaleX = this.#canvas.width / rect.width;
+            const scaleY = this.#canvas.height / rect.height;
+            
+            this.#mouseX = (event.clientX - rect.left) * scaleX;
+            this.#mouseY = (event.clientY - rect.top) * scaleY;
         });
     }
 
@@ -123,13 +138,13 @@ class Game {
 
         this.#ctx.fillStyle = 'gold';
         this.#ctx.font = '24px Arial';
-        this.#ctx.fillText(`$$: ${this.#playerMoney}`, 20, 80);
+        this.#ctx.fillText(`$$ atual: ${this.#playerMoney}`, 20, 80);
 
         this.#ctx.fillStyle = 'lightgreen';
-        this.#ctx.fillText(`Life: ${this.#playerHealth}`, this.#canvas.width - 150, 80);
+        this.#ctx.fillText(`Life atual: ${this.#playerHealth}`, this.#canvas.width - 150, 80);
 
         this.#ctx.fillStyle = 'cyan';
-        this.#ctx.fillText(`Score: ${this.#playerScore}`, this.#canvas.width / 2 - 70, 80);
+        this.#ctx.fillText(`Score atual: ${this.#playerScore}`, this.#canvas.width / 2 - 70, 80);
 
         if (this.#messageTimer > 0) {
             this.#ctx.fillStyle = 'rgba(255, 100, 100, 0.9)';

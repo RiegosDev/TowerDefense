@@ -1,0 +1,141 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+  <head>
+    <meta charset="UTF-8" />
+    <meta
+      name="viewport"
+      content="width=device-width, initial-scale=1.0" />
+    <title>
+      Riegos.dev - Tower Defense
+    </title>
+    <style>
+      /* Reset básico e tema escuro */
+      * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+      }
+
+      body {
+        background-color: #111;
+        color: white;
+        font-family: "Segoe UI", Tahoma,
+          Geneva, Verdana, sans-serif;
+        /* Usando Flexbox para centralizar tudo */
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        min-height: 100vh;
+        padding: 10px;
+      }
+
+      /* Container principal do jogo */
+      #game-container {
+        width: 100%;
+        /* A largura máxima será a do nosso jogo, para não esticar em telas gigantes */
+        max-width: 1280px;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+      }
+
+      /* O segredo da responsividade do canvas */
+      canvas {
+        width: 100%;
+        height: auto; /* A altura se ajusta automaticamente para manter a proporção */
+        background-color: #000;
+        border: 2px solid #555;
+      }
+
+      /* Estilos para a UI que já tínhamos */
+      header,
+      footer {
+        width: 100%;
+        max-width: 1280px;
+        text-align: center;
+        padding: 10px 0;
+      }
+
+      #game-stats {
+        width: 100%;
+        display: flex;
+        flex-wrap: wrap; /* Permite que os itens quebrem linha em telas pequenas */
+        justify-content: space-between;
+        align-items: center;
+        padding: 10px 20px;
+        background-color: #2a2a2a;
+        #game-stats span {
+          font-size: 22px;
+          font-weight: bold;
+        }
+
+        #money-display {
+          color: gold;
+        }
+        #score-display {
+          color: cyan;
+        }
+        #life-display {
+          color: lightgreen;
+        }
+        #victory-score-display {
+          color: violet;
+        }
+        border: 2px solid #555;
+        border-bottom: none;
+      }
+    </style>
+  </head>
+  <body>
+    <div id="game-container">
+      <header>
+        <img
+          src="./img/riegosdevtdfinal.png"
+          alt="Título do Jogo"
+          style="
+            width: 100%;
+            max-width: 500px;
+          " />
+      </header>
+
+      <div id="game-stats">
+        <span id="money-display"
+          >$$ inicial: 100</span
+        >
+        <div>
+          <span id="score-display"
+            >Score inicial: 0</span
+          >
+          <span
+            id="victory-score-display"
+            style="margin-left: 20px"
+            >Meta: 1050</span
+          >
+        </div>
+        <span id="life-display"
+          >Life inicial: 10</span
+        >
+      </div>
+
+      <canvas
+        id="game-canvas"
+        width="1280"
+        height="720"></canvas>
+
+      <footer>
+        <img
+          src="./img/devdtr.png"
+          alt="Desenvolvido por"
+          style="
+            width: 100%;
+            max-width: 400px;
+          " />
+      </footer>
+    </div>
+
+    <script
+      src="main.js"
+      type="module"></script>
+  </body>
+</html>
