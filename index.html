@@ -9,7 +9,6 @@
       Riegos.dev - Tower Defense
     </title>
     <style>
-      /* Reset básico e tema escuro */
       * {
         margin: 0;
         padding: 0;
@@ -21,7 +20,6 @@
         color: white;
         font-family: "Segoe UI", Tahoma,
           Geneva, Verdana, sans-serif;
-        /* Usando Flexbox para centralizar tudo */
         display: flex;
         flex-direction: column;
         align-items: center;
@@ -30,25 +28,28 @@
         padding: 10px;
       }
 
-      /* Container principal do jogo */
       #game-container {
         width: 100%;
-        /* A largura máxima será a do nosso jogo, para não esticar em telas gigantes */
         max-width: 1280px;
         display: flex;
         flex-direction: column;
         align-items: center;
       }
 
-      /* O segredo da responsividade do canvas */
-      canvas {
+      #canvas-wrapper {
+        position: relative; /* Essencial para posicionar o painel dentro dele */
         width: 100%;
-        height: auto; /* A altura se ajusta automaticamente para manter a proporção */
-        background-color: #000;
-        border: 2px solid #555;
+        max-width: 1280px;
       }
 
-      /* Estilos para a UI que já tínhamos */
+      canvas {
+        width: 100%;
+        height: auto;
+        background-color: #000;
+        border: 2px solid #fc0000;
+        display: block; /* Remove pequeno espaço extra abaixo do canvas */
+      }
+
       header,
       footer {
         width: 100%;
@@ -60,30 +61,131 @@
       #game-stats {
         width: 100%;
         display: flex;
-        flex-wrap: wrap; /* Permite que os itens quebrem linha em telas pequenas */
+        flex-wrap: wrap;
         justify-content: space-between;
         align-items: center;
         padding: 10px 20px;
         background-color: #2a2a2a;
-        #game-stats span {
-          font-size: 22px;
-          font-weight: bold;
+        border: 2px solid #fc0000;
+        border-bottom: none;
+      }
+
+      #game-stats span {
+        font-size: 22px;
+        font-weight: bold;
+      }
+
+      #money-display {
+        color: gold;
+      }
+      #score-display {
+        color: cyan;
+      }
+      #life-display {
+        color: lightgreen;
+      }
+      #victory-score-display {
+        color: violet;
+      }
+
+      #start-game-button {
+        padding: 8px 16px;
+        font-size: 16px;
+        font-weight: bold;
+        color: white;
+        background-color: #4caf50;
+        border: 2px solid #388e3c;
+        border-radius: 5px;
+        cursor: pointer;
+        transition: background-color
+          0.3s;
+      }
+
+      #start-game-button:hover {
+        background-color: #45a049;
+      }
+
+      #status-panel {
+        position: absolute;
+        bottom: 20px;
+        right: 20px;
+        background-color: rgba(
+          20,
+          20,
+          40,
+          0.85
+        );
+        border: 2px solid #63b3ed;
+        border-radius: 15px;
+        padding: 15px;
+        font-family: "Courier New",
+          Courier, monospace;
+        font-size: 16px;
+        color: #f0f0f0;
+        width: 250px;
+      }
+
+      #status-panel p {
+        margin: 0 0 8px 0;
+        display: flex;
+        justify-content: space-between;
+      }
+      #status-panel p span:first-child {
+        color: #a0a0a0;
+      }
+      #status-panel p span:last-child {
+        font-weight: bold;
+        color: white;
+      }
+
+      footer {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+      }
+      @media (max-width: 768px) {
+        #status-panel {
+          /* Transforma em uma barra no rodapé */
+          position: relative;
+          width: 100%;
+          margin-top: 5px; /* Espaço entre o canvas e o painel */
+          border-radius: 0;
+
+          /* Organiza os itens lado a lado */
+          display: flex;
+          flex-wrap: wrap;
+          justify-content: space-around;
+          align-items: center;
+          padding: 8px;
+          gap: 10px 20px; /* Espaçamento vertical e horizontal entre os itens */
         }
 
-        #money-display {
-          color: gold;
+        #status-panel p {
+          margin: 0; /* Remove a margem original das tags <p> */
+          flex-grow: 1; /* Permite que os itens cresçam e se ajustem */
+          text-align: center; /* Centraliza o texto de cada item */
         }
-        #score-display {
-          color: cyan;
+
+        #status-panel hr {
+          display: none; /* Esconde as linhas divisórias que não fazem mais sentido */
         }
-        #life-display {
-          color: lightgreen;
+
+        /* Ajusta o painel de stats principal para empilhar melhor */
+        #game-stats {
+          flex-direction: column;
+          gap: 10px;
+          padding: 15px;
         }
-        #victory-score-display {
-          color: violet;
+      }
+
+      @media (max-width: 480px) {
+        #status-panel p {
+          font-size: 14px; /* Diminui um pouco a fonte em telas muito pequenas */
         }
-        border: 2px solid #555;
-        border-bottom: none;
+
+        #game-stats span {
+          font-size: 18px; /* Ajusta também a fonte dos stats principais */
+        }
       }
     </style>
   </head>
@@ -92,7 +194,7 @@
       <header>
         <img
           src="./img/riegosdevtdfinal.png"
-          alt="Título do Jogo"
+          alt="Riegos.dev - Tower Defense"
           style="
             width: 100%;
             max-width: 500px;
@@ -101,11 +203,11 @@
 
       <div id="game-stats">
         <span id="money-display"
-          >$$ inicial: 100</span
+          >$$: 100</span
         >
         <div>
           <span id="score-display"
-            >Score inicial: 0</span
+            >Score: 0</span
           >
           <span
             id="victory-score-display"
@@ -113,29 +215,99 @@
             >Meta: 1050</span
           >
         </div>
+        <div>
+          <button
+            id="start-game-button">
+            Iniciar Jogo
+          </button>
+        </div>
         <span id="life-display"
-          >Life inicial: 10</span
+          >Life: 10</span
         >
       </div>
 
-      <canvas
-        id="game-canvas"
-        width="1280"
-        height="720"></canvas>
+      <div id="canvas-wrapper">
+        <canvas
+          id="game-canvas"
+          width="1280"
+          height="720"></canvas>
+        <div id="status-panel">
+          <p>
+            <span>TIMING:</span>
+            <span id="status-timer"
+              >00:00</span
+            >
+          </p>
+          <hr
+            style="
+              border-color: #555;
+              margin-bottom: 8px;
+            " />
+          <p>
+            <span
+              >Ganho atual ($):</span
+            >
+            <span
+              id="status-money-reward"
+              >10</span
+            >
+          </p>
+          <p>
+            <span>Score atual:</span>
+            <span
+              id="status-score-reward"
+              >15</span
+            >
+          </p>
+          <hr
+            style="
+              border-color: #555;
+              margin-bottom: 8px;
+            " />
+          <p>
+            <span>Qtde Torres:</span>
+            <span
+              id="status-tower-count"
+              >0</span
+            >
+          </p>
+          <p>
+            <span
+              >Custo Torre ($):</span
+            >
+            <span id="status-tower-cost"
+              >50</span
+            >
+          </p>
+          <p>
+            <span>Wave atual:</span>
+            <span id="status-act-wave"
+              >50</span
+            >
+          </p>
+        </div>
+      </div>
 
       <footer>
         <img
           src="./img/devdtr.png"
           alt="Desenvolvido por"
           style="
-            width: 100%;
+            width: 50%;
             max-width: 400px;
           " />
       </footer>
     </div>
+    <audio
+      id="bg-music"
+      src="./audio/background_music.mp3"
+      loop></audio>
 
+    <audio
+      id="victory-sfx"
+      src="./audio/bgwin.mp3"></audio>
     <script
-      src="main.js"
+      src="medit.js"
       type="module"></script>
   </body>
 </html>

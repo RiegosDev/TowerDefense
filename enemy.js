@@ -1,42 +1,25 @@
 export class Enemy {
-    #x;
-    #y;
-    #radius;
-    #speed;
-    #path;
-    #pathIndex;
-    hasReachedEnd;
-    #health;
-    #maxHealth;
-    #moneyValue;
-    #scoreValue;
-    x;
-    y;
-    radius;
-    isDefeated;
+    #x; #y; #radius; #speed; #path; #pathIndex;
+    hasReachedEnd; #health; #maxHealth; #moneyValue;
+    #scoreValue; x; y; radius; isDefeated;
+    #image;
 
-    get moneyValue() {
-        return this.#moneyValue;
-    }
+    get moneyValue() { return this.#moneyValue; }
+    get scoreValue() { return this.#scoreValue; }
 
-    get scoreValue() {
-        return this.#scoreValue;
-    }
-
-    constructor(path) {
+    constructor(path, image) {
         this.#path = path;
+        this.#image = image;
         this.#x = this.#path[0].x;
         this.#y = this.#path[0].y;
-        this.#radius = 25;
-        // --- GAME BALANCE: Inimigos mais rápidos ---
+        this.#radius = 25; 
         this.#speed = 85; 
         this.#pathIndex = 1;
         this.hasReachedEnd = false;
-        // --- GAME BALANCE: Inimigos mais resistentes ---
         this.#maxHealth = 5; 
         this.#health = this.#maxHealth;
         this.#moneyValue = 10;
-        this.#scoreValue = 15; // Aumentei um pouco o score por inimigo
+        this.#scoreValue = 15;
         this.isDefeated = false;
         this.x = this.#x;
         this.y = this.#y;
@@ -51,17 +34,17 @@ export class Enemy {
     }
 
     draw(ctx) {
+        const size = this.#radius * 2;
+        ctx.drawImage(this.#image, this.#x - this.#radius, this.#y - this.#radius, size, size);
+
         const healthBarWidth = 40;
         const healthBarHeight = 5;
         const healthPercentage = this.#health / this.#maxHealth;
+        
         ctx.fillStyle = 'red';
         ctx.fillRect(this.#x - healthBarWidth / 2, this.#y - this.#radius - 10, healthBarWidth, healthBarHeight);
         ctx.fillStyle = 'green';
         ctx.fillRect(this.#x - healthBarWidth / 2, this.#y - this.#radius - 10, healthBarWidth * healthPercentage, healthBarHeight);
-        ctx.fillStyle = '#43055c9f';
-        ctx.beginPath();
-        ctx.arc(this.#x, this.#y, this.#radius, 0, Math.PI * 2);
-        ctx.fill();
     }
 
     update(deltaTime) {
